@@ -1,41 +1,44 @@
-version: '3'
-
 services:
-  db:
-    image: postgres:13
-    environment:
-      POSTGRES_USER: grid
-      POSTGRES_PASSWORD: grid
-      POSTGRES_DB: grid
-    ports:
-      - "5432:5432"
+    db:
+        image: postgres:13
+        environment:
+            POSTGRES_USER: grid
+            POSTGRES_PASSWORD: grid
+            POSTGRES_DB: grid
+        ports:
+            - "5432:5432"
+        volumes:
+            - ./data/postgres:/var/lib/postgresql/data
 
-  qdrant:
-    image: qdrant/qdrant:latest
-    restart: always
-    container_name: qdrant
-    ports:
-      - 6333:6333
-      - 6334:6334
-    expose:
-      - 6333
-      - 6334
-      - 6335
-    configs:
-      - source: qdrant_config
-        target: /qdrant/config/production.yaml
-    volumes:
-      - ./qdrant_data:/qdrant/storage
+    qdrant:
+        image: qdrant/qdrant:latest
+        restart: always
+        container_name: qdrant
+        ports:
+            - 6333:6333
+            - 6334:6334
+        expose:
+            - 6333
+            - 6334
+            - 6335
+        configs:
+            - source: qdrant_config
+              target: /qdrant/config/production.yaml
+        volumes:
+            - ./data/qdrant:/qdrant/storage
 
-  # api:
-  #   build: .
-  #   ports:
-  #     - "8000:8000"
-  #   depends_on:
-  #     - db
-  #   environment:
-  #     DATABASE_URL: postgresql+asyncpg://grid:grid@db:5432/grid
+    # api:
+    #   build: .
+    #   ports:
+    #     - "8000:8000"
+    #   depends_on:
+    #     - db
+    #   environment:
+    #     DATABASE_URL: postgresql+asyncpg://grid:grid@db:5432/grid
 configs:
-      qdrant_config:
+    qdrant_config:
         content: |
-          log_level: INFO 
+            log_level: INFO
+volumes:
+    db_data:
+    qdrant_data:
