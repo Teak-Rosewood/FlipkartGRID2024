@@ -8,14 +8,14 @@ class Product(Base):
     __tablename__ = "products"
     item_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     name = Column(String, index=True)
-    metadata = Column(JSON)
+    other_data = Column(JSON)
     price = Column(Float)
     shelf_life = Column(Integer)
     total_no = Column(Integer)
 
 class ProductTransaction(Base):
     __tablename__ = "product_transactions"
-    created_at = Column(TIMESTAMP, default=datetime.datetime.now(datetime.datetime.UTC))
+    created_at = Column(TIMESTAMP, default=datetime.datetime.now())
     transaction_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     item_id = Column(Integer, ForeignKey(Product.item_id))
     no = Column(Integer)

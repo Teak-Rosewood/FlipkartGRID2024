@@ -1,0 +1,29 @@
+Given the OCR-extracted information below, return a JSON object where:
+
+1. If the `productname`, `price`, `mfg_date` or `net_weight` is not present, set it to `"NA"`.
+2. If `shelf_life` is not provided, set it to `"NA"`.
+3. If `price` or `shelf_life` are `"NA"`, predict them from the text or trustable sources and add them to `estimates`.
+4. Ensure that `price` is a number (float), `mfg_date` is a date and `shelf_life` is an integer in days.
+5. Include all additional details under the `metadata` field.
+6. Note that all these products are sold in India.
+
+OCR Extract:
+{text}
+
+Expected JSON format:
+{{
+  "productname": "[Extracted or 'NA']",
+  "price": "[Extracted or 'NA']",
+  "net_weight": "[Extracted or 'NA']",
+  "shelf_life": "[Extracted or 'NA']",
+  "mfg_date": "[Extracted or 'NA']",
+  "estimates" : {{
+    price: "[if price is NA provide an estimated price in numbers]"
+    shelf_life: "[if shelf_life is NA provide an estimated price in days]"
+  }}
+  "metadata": {{
+    intuitively find parameters for all other information and put them in here with their specific key words
+  }}
+}}
+
+Return only the JSON object, without any additional text or explanation.
