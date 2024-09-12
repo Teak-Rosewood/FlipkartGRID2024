@@ -39,6 +39,9 @@ configs:
     qdrant_config:
         content: |
             log_level: INFO
+
 volumes:
-    db_data:
-    qdrant_data:
+    postgres:
+        driver: local
+    qdrant:
+        driver: local
