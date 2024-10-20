@@ -1,10 +1,11 @@
 // src/components/SubmitButton.jsx
-import { useRecoilValue } from 'recoil';
-import { videoRefsAtom } from '../recoil/atoms';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { videoRefsAtom, outputDataState } from '../recoil/atoms';
 import axios from 'axios';
 
 const SubmitButton = () => {
   const videoRefs = useRecoilValue(videoRefsAtom);
+  const [outputData, setOutputData] = useRecoilState(outputDataState);
 
   const handleSubmit = async () => {
     // Access the video elements from Recoil state
@@ -35,9 +36,39 @@ const SubmitButton = () => {
         image2,
       });
 
-      console.log('Backend response:', response.data);
+      const { productname, price, net_weight, shelf_life, mfg_date, estimates, metadata } = response.data.result;
+
+      // Format the product information
+      const productInfo = `
+      General Product Information: <br>
+      Product Name: ${productname} <br>
+      Price: ${price} <br>
+      Net Weight: ${net_weight} <br>
+      Shelf Life: ${shelf_life} <br>
+      Manufacturing Date: ${mfg_date} <br>
+      Estimated Price: ${estimates.price} <br>
+      Estimated Shelf Life: ${estimates.shelf_life} <br>
+    `.trim();
+
+      // Format the metadata
+      const metadataHeader = "Metadata Information: <br>";
+      const metadataInfo = Object.entries(metadata)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join('<br>');
+      const fullMetadata = `${metadataHeader} ${metadataInfo}`;
+
+      // Adding the output data
+      setOutputData((prevData) => [
+        ...prevData,
+        { text: response.data.message, sender: 'system' },
+        { text: productInfo, sender: 'system' },
+        { text: fullMetadata, sender: 'system' },
+      ]);
     } catch (error) {
-      console.error('Error submitting videos:', error);
+      setOutputData((prevData) => [
+        ...prevData,
+        { text: `Error processing videos: ${error.response?.data?.detail || error.message}`, sender: 'system' },
+      ]);
     }
   };
 
@@ -46,7 +77,7 @@ const SubmitButton = () => {
       className="mt-8 px-8 py-3 bg-blue-600 text-white text-lg rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 ease-in-out transform hover:scale-105"
       onClick={handleSubmit}
     >
-      Submit Videos
+      Scan Images
     </button>
   );
 };
