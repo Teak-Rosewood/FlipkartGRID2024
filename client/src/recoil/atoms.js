@@ -15,3 +15,11 @@ export const outputDataState = atom({
   key: 'outputDataState',
   default: [],
 });
+
+export const videoRefsAtom = atom({
+  key: 'videoRefsAtom',
+  default: {
+    videoFeed1: null,
+    videoFeed2: null,
+  },
+});

@@ -33,10 +33,18 @@ def correct_text(text):
 def get_ocr_text(img_path):
     result = ocr.ocr(img_path, cls=True)
     result = result[0]
-    txts = [line[1][0] for line in result]
-
+    txts = []
+    try:    
+        for line in result:
+            try:
+                txts.append(line[1][0])
+            except Exception as e:
+                continue
+    except Exception as e:
+        return ""
     # Perform spell correction and spacing, ignoring text with numbers
-    corrected_texts = [correct_text(text) for text in txts]
+    # Filter out non-string values in txts
+    corrected_texts = [correct_text(text) for text in txts if isinstance(text, str)]
 
     final_text = " ".join(corrected_texts)
     return final_text

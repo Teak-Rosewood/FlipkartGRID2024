@@ -1,19 +1,34 @@
 // src/components/VideoFeed.jsx
-import { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { videoRefsAtom } from '../recoil/atoms';
 
-const VideoFeed = ({ label }) => {
+const VideoFeed = ({ label, videoRefKey }) => {
   const videoRef = useRef(null);
   const [mediaDevices, setMediaDevices] = useState([]);
   const [selectedCamera, setSelectedCamera] = useState('');
+  const [videoRefs, setVideoRefs] = useRecoilState(videoRefsAtom);
 
   useEffect(() => {
-    // Function to fetch media devices
+    // Update the Recoil state with the current videoRef
+    setVideoRefs((prevRefs) => ({
+      ...prevRefs,
+      [videoRefKey]: videoRef,
+    }));
+  }, [videoRef, setVideoRefs, videoRefKey]);
+
+  useEffect(() => {
+    // Fetch media devices and set default camera
     const fetchMediaDevices = async () => {
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      const videoDevices = devices.filter(device => device.kind === 'videoinput');
-      setMediaDevices(videoDevices);
-      if (videoDevices.length > 0) {
-        setSelectedCamera(videoDevices[0].deviceId); // Set the default camera
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoDevices = devices.filter((device) => device.kind === 'videoinput');
+        setMediaDevices(videoDevices);
+        if (videoDevices.length > 0) {
+          setSelectedCamera(videoDevices[0].deviceId);
+        }
+      } catch (error) {
+        console.error('Error fetching media devices:', error);
       }
     };
 
@@ -46,9 +61,9 @@ const VideoFeed = ({ label }) => {
         className="mb-4 p-2 border border-gray-300 rounded-md"
         value={selectedCamera}
       >
-        {mediaDevices.map((device) => (
+        {mediaDevices.map((device, index) => (
           <option key={device.deviceId} value={device.deviceId}>
-            {device.label || `Camera ${mediaDevices.indexOf(device) + 1}`}
+            {device.label || `Camera ${index + 1}`} ({index + 1})
           </option>
         ))}
       </select>
@@ -63,6 +78,7 @@ const VideoFeed = ({ label }) => {
 };
 
 export default VideoFeed;
+
 
 
 

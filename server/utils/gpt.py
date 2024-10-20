@@ -10,7 +10,7 @@ def load_template(file_path):
     
 
 def get_gpt_formatted_text(text):
-    template_path = os.path.join('gpt/templates', 'ocr_to_json.txt')
+    template_path = os.path.join('utils/templates', 'ocr_to_json.txt')
     template = load_template(template_path)
     model = ChatMistralAI(model="open-mistral-nemo")
     prompt = PromptTemplate(template=template, input_variables=['text'])
