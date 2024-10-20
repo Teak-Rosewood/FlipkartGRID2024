@@ -13,8 +13,9 @@ router = APIRouter()
 
 class ImageData(BaseModel):
     image1: str
-    image2: str
-
+    # image2: str
+ip_camera_url = 'http://192.168.1.6:8080/video'
+cap2 = cv2.VideoCapture(ip_camera_url)
 @router.get('/')
 async def root():
     return {"message": "this is the pipeline router"}
@@ -40,7 +41,8 @@ def root(data: ImageData):
     # Convert the received base64 images to OpenCV format
     try:
         image_cv1 = read_image_from_base64(data.image1)
-        image_cv2 = read_image_from_base64(data.image2)
+        _, image_cv2 = cap2.read()
+
     except Exception as e:
         return {"error": f"Failed to convert images: {str(e)}"}
     num, img = detect_objects(image_cv2) 
@@ -48,12 +50,23 @@ def root(data: ImageData):
         text1 = get_ocr_text(image_cv1)
         text2 = get_ocr_text(image_cv2)
         combined_text = "Frame 1: " + text1 + " Frame 2: " + text2
+        print(combined_text)
         formated_text = get_gpt_formatted_text(combined_text)
     else:
-        formated_text = "No objects detected"    
+        formated_text =  {
+        "mfg_date": None,
+        "net_weight": None,
+        "price": None,
+        "productname": None,
+        "shelf_life": None
+        }   
 
     # Example response: just return a message indicating success
     return {
         "message": "Processing done",
+        "count": 1,
+        "product": True,
+        "fruit": None,
+        "freshness": None,
         "result": formated_text
     }
