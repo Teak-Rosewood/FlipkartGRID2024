@@ -20,3 +20,6 @@ def get_gpt_formatted_text(text):
         return json.loads(content)
     except json.JSONDecodeError as e: 
         return "Error in JSON Format"
+
+
+
