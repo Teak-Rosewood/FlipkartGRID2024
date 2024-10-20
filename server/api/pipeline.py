@@ -48,8 +48,6 @@ def root(data: ImageData):
         text1 = get_ocr_text(image_cv1)
         text2 = get_ocr_text(image_cv2)
         combined_text = "Frame 1: " + text1 + " Frame 2: " + text2
-        print(text2)
-        formated_text = combined_text
         formated_text = get_gpt_formatted_text(combined_text)
     else:
         formated_text = "No objects detected"    
