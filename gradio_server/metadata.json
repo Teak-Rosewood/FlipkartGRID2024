@@ -1,0 +1,5 @@
+{
+    "vith_link": "http://127.0.0.1:7862",
+    "freshness_link": "http://127.0.0.1:7860",
+    "ocr_link": "http://127.0.0.1:7861"
+}
