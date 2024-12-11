@@ -1,0 +1,8 @@
+gradio
+transformers
+torch
+torchvision
+joblib
+scikit-learn
+symspellpy
+easyocr
