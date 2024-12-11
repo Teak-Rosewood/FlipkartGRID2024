@@ -50,6 +50,7 @@ Outputs are combined and passed through Mistral model for processing and refacto
 Client is made on ReactJS.
 Server is made on FastAPI
 Databasing on Postgres SQL.
+Website hosted on Amazon EC2
 
 ## Database Schema
 
