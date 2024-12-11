@@ -23,7 +23,7 @@ Gradio is used to host the models locally
 Requires Python 3.10+, tested on Python 3.11 with CUDA 12.7
 
 ```bash
-pip install -r requirements.txt
+pip install -r gradio_server/requirements.txt
 ```
 
 ```bash
