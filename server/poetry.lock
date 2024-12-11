@@ -848,6 +848,25 @@ test-full = ["adlfs", "aiohttp (!=4.0.0a0,!=4.0.0a1)", "cloudpickle", "dask", "d
 tqdm = ["tqdm"]
 
 [[package]]
+name = "gradio-client"
+version = "1.5.1"
+description = "Python library for easily interacting with trained machine learning models"
+optional = false
+python-versions = ">=3.10"
+files = [
+    {file = "gradio_client-1.5.1-py3-none-any.whl", hash = "sha256:175e4ac399591d919af85a097661cdd760b8dd1ca229e28ef4da978fde84a398"},
+    {file = "gradio_client-1.5.1.tar.gz", hash = "sha256:c443013e3532828e202c9679b254016406a1753666c3c601ea8557c724adbaf7"},
+]
+
+[package.dependencies]
+fsspec = "*"
+httpx = ">=0.24.1"
+huggingface-hub = ">=0.19.3"
+packaging = "*"
+typing-extensions = ">=4.0,<5.0"
+websockets = ">=10.0,<15.0"
+
+[[package]]
 name = "greenlet"
 version = "3.0.3"
 description = "Lightweight in-process concurrent programming"
@@ -4304,4 +4323,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "47d060ef5836d49bd60905bcd2cb1f5606feef23d848f17044db0043394754d3"
+content-hash = "a5f3b6de6b49b79032461e5b82314225c2b77754fd1518a2878fa90cc698e4e9"

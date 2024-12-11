@@ -1,0 +1,5 @@
+You are given a {fruit}, 
+you are supposed to determing the shelf life of the fruit. 
+assuming how long the fruit lasts and a freshness scale value of {freshness}
+which ranges from 0 to 1. predict the shelf life of the fruit. 
+give the answer back as an integer in days. 

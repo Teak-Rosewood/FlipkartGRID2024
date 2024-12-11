@@ -1,72 +1,88 @@
-from fastapi import APIRouter, Form
-from pydantic import BaseModel
-import base64
-import cv2
-import io
-from PIL import Image
-import numpy as np
-from utils.obj_detection import detect_objects
-from utils.ocr_detection import get_ocr_text
-from utils.gpt import get_gpt_formatted_text 
+from fastapi import APIRouter, Form, BackgroundTasks, HTTPException
+import json
+
+from db.models import ScanDatabase, ImageDatabase, ProductDatabase, FreshDatabase
+from db.database import save_record, get_sql_db
+
+from utils.utils import ImageData, get_uuid
+from utils.ocr import single_image_ocr
+from utils.multiple_products import process_multiple_products
+from utils.image_functions import store_image
+from utils.gradio_clients import detect_objects
 
 router = APIRouter()
 
-class ImageData(BaseModel):
-    image1: str
-    # image2: str
-ip_camera_url = 'http://192.168.1.6:8080/video'
-cap2 = cv2.VideoCapture(ip_camera_url)
 @router.get('/')
 async def root():
     return {"message": "this is the pipeline router"}
 
-def read_image_from_base64(base64_image: str) -> np.ndarray:
-    # Decode the base64 image
-    image_data = base64_image.split(",")[1]
-    image_bytes = io.BytesIO(base64.b64decode(image_data))
+@router.post("/initial_image_info")
+def root(multiple_products: BackgroundTasks, data: ImageData):
+    scan_id = get_uuid()
+    store_image(data.images[0], scan_id)
+    count, classes, bounding_boxes, scores = detect_objects('images/' + scan_id + '_1.jpg')
 
-    # Open the image using PIL and convert to RGB
-    image = Image.open(image_bytes).convert("RGB")
+    record = ScanDatabase(
+        scan_id=scan_id,
+        count=count,
+        items_detected= {
+            "classes": classes,
+            "bounding_boxes": bounding_boxes,
+            "scores": scores
+        }
+    )
+    if count == 1 and classes[0] != "fruit":
+        image_record = ImageDatabase(
+            scan_id=scan_id,
+            image_id=1,
+        )
+        save_record(image_record)
+    values = scan_id, count, classes, bounding_boxes
+    
+    if count > 1:
+        multiple_products.add_task(process_multiple_products, values)
+        
 
-    # Convert PIL image to OpenCV format (numpy array)
-    image_array = np.array(image)
+    save_record(record)
 
-    # Convert RGB to BGR, because OpenCV uses BGR format
-    image_array = cv2.cvtColor(image_array, cv2.COLOR_RGB2BGR)
-
-    return image_array
-
-@router.post("/process_images")
-def root(data: ImageData):
-    # Convert the received base64 images to OpenCV format
-    try:
-        image_cv1 = read_image_from_base64(data.image1)
-        _, image_cv2 = cap2.read()
-
-    except Exception as e:
-        return {"error": f"Failed to convert images: {str(e)}"}
-    num, img = detect_objects(image_cv2) 
-    if(num >= 0):
-        text1 = get_ocr_text(image_cv1)
-        text2 = get_ocr_text(image_cv2)
-        combined_text = "Frame 1: " + text1 + " Frame 2: " + text2
-        print(combined_text)
-        formated_text = get_gpt_formatted_text(combined_text)
-    else:
-        formated_text =  {
-        "mfg_date": None,
-        "net_weight": None,
-        "price": None,
-        "productname": None,
-        "shelf_life": None
-        }   
-
-    # Example response: just return a message indicating success
     return {
-        "message": "Processing done",
-        "count": 1,
-        "product": True,
-        "fruit": None,
-        "freshness": None,
-        "result": formated_text
+        "count": count,
+        "scan_id": scan_id,
+        "classes": classes,
+        "bounding_boxes": bounding_boxes,
+        "scores": scores
     }
+
+@router.post("/single_image_info")
+def root(image_ocr_process: BackgroundTasks, data: ImageData, scan_id: str):
+    for i, image in enumerate(data.images):
+        store_image(image, scan_id, i+2, inDB=True)
+    image_ocr_process.add_task(single_image_ocr, scan_id)
+    return {"message": "Image Processing"}
+
+@router.post("/multiple_image_info")
+def root(image_ocr_process: BackgroundTasks, data: ImageData, scan_id: str):
+    for i, image in enumerate(data.images):
+        store_image(image, scan_id, i+2, inDB=True)
+    return {"message": "Image Processing"}
+
+@router.get("/image_info/{scan_id}")
+def get_image_info(scan_id: str):
+    db = get_sql_db()
+    try:
+        product_scan_record = db.session.query(ScanDatabase).filter(ScanDatabase.scan_id == scan_id).first()
+        if not product_scan_record:
+            raise HTTPException(status_code=404, detail="Scan ID not found")
+        
+        if product_scan_record.processed:
+            product_data = db.session.query(ProductDatabase).filter(ProductDatabase.scan_id == scan_id).all()
+            fresh_data = db.session.query(FreshDatabase).filter(FreshDatabase.scan_id == scan_id).all()
+            
+            return {
+                "product_data": [record.__dict__ for record in product_data],
+                "fresh_data": [record.__dict__ for record in fresh_data]
+            }
+        else:
+            return {"message": "Scan is not yet processed"}
+    finally:
+        db.session.close()

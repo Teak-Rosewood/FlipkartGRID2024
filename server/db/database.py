@@ -16,3 +16,14 @@ def get_sql_db():
         yield session
     finally:
         session.close()
+
+def save_record(record):
+    db = get_sql_db()
+    db.session.add(record)
+    db.session.commit()
+
+def save_multiple_records(records):
+    db = get_sql_db()
+    for record in records:
+        db.session.add(record)
+    db.session.commit()

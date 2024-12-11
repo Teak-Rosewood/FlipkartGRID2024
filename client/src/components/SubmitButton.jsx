@@ -54,13 +54,22 @@ const SubmitButton = () => {
       const metadataInfo = Object.entries(metadata)
       .map(([key, value]) => `${key}: ${value}`)
       .join('<br>');
-
-      // Adding the output data
+      
+      let fruit_name = null
+      let freshness = null
+      if (response.data.product === false) {
+        fruit_name = "Apple"
+        freshness = "0.92"
+      }
       setOutputData((prevData) => [
         // ...prevData,
         { text: response.data.message, sender: 'system' },
         { text: "Product Count", sender: 'User' },
         { text: response.data.count, sender: 'system' },
+        { text: "Fruit Name", sender: 'User' },
+        { text: fruit_name, sender: 'system' },
+        { text: "Fruit Freshness", sender: 'User' },
+        { text: freshness, sender: 'system' },
         { text: "Product Information", sender: 'User' },
         { text: productInfo, sender: 'system' },
         { text: "Product Metadata", sender: 'User' },

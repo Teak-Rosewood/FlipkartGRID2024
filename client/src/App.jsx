@@ -14,7 +14,9 @@ const App = () => {
           <div className="flex flex-col w-full md:w-1/2 gap-8">
             <VideoFeed label="Top View" videoRefKey="videoFeed1"/>
             {/* <VideoFeed label="Side View" videoRefKey="videoFeed2"/> */}
-            <IPFeed label="IP Camera" />
+            <IPFeed label="IP Camera 1" ip="http://192.168.1.6:8080/video" />
+            <IPFeed label="IP Camera 2" ip="http://192.168.1.8:8081/video" />
+        
           </div>
           
           <div className="flex flex-col w-full md:w-1/2 gap-8">
