@@ -50,3 +50,67 @@ Outputs are combined and passed through Mistral model for processing and refacto
 Client is made on ReactJS.
 Server is made on FastAPI
 Databasing on Postgres SQL.
+
+## Database Schema
+
+### **scan_db**
+| Column Name      | Data Type     | Constraints                                   |
+|------------------|---------------|-----------------------------------------------|
+| `scan_id`        | `String`      | Primary Key, Indexed                         |
+| `timestamp`      | `TIMESTAMP`   | Default: Current Timestamp                   |
+| `count`          | `Integer`     | None                                         |
+| `processed`      | `Boolean`     | Default: `False`                             |
+| `items_detected` | `JSON`        | None                                         |
+| `item_summary`   | `JSON`        | None                                         |
+
+**Notes:**  
+`items_detected` contains a nested JSON structure with keys:  
+- `classes` (list of class names)  
+- `bounding_box` (list of bounding box coordinates)  
+- `scores` (list of detection scores)
+
+---
+
+### **image_db**
+| Column Name      | Data Type     | Constraints                                   |
+|------------------|---------------|-----------------------------------------------|
+| `image_id`       | `Integer`     | Primary Key (composite)                      |
+| `scan_id`        | `String`      | Foreign Key (references `scan_db.scan_id`), Primary Key (composite) |
+| `timestamp`      | `TIMESTAMP`   | Default: Current Timestamp                   |
+| `ocr_text`       | `String`      | None                                         |
+
+**Table Constraints:**  
+- **Primary Key**: Composite (`image_id`, `scan_id`)  
+- **Foreign Key**: `scan_id` references `scan_db(scan_id)` with `ON DELETE CASCADE`
+
+---
+
+### **product_db**
+| Column Name      | Data Type     | Constraints                                   |
+|------------------|---------------|-----------------------------------------------|
+| `product_id`     | `Integer`     | Primary Key                                  |
+| `scan_id`        | `String`      | Foreign Key (references `scan_db.scan_id`), Primary Key (composite) |
+| `brand`          | `String`      | None                                         |
+| `expiry_date`    | `TIMESTAMP`   | None                                         |
+| `expired`        | `Boolean`     | None                                         |
+| `shelf_life`     | `Integer`     | Indexed                                      |
+| `summary`        | `String`      | None                                         |
+
+**Notes:**  
+- **Primary Key**: Composite (`product_id`, `scan_id`)  
+- **Foreign Key**: `scan_id` references `scan_db(scan_id)` with `ON DELETE CASCADE`
+
+---
+
+### **fres_db**
+| Column Name      | Data Type     | Constraints                                   |
+|------------------|---------------|-----------------------------------------------|
+| `product_id`     | `Integer`     | Primary Key (composite)                      |
+| `scan_id`        | `String`      | Foreign Key (references `scan_db.scan_id`), Primary Key (composite) |
+| `produce`        | `String`      | None                                         |
+| `freshness`      | `Float`       | None                                         |
+| `shelf_life`     | `Integer`     | Indexed                                      |
+
+**Table Constraints:**  
+- **Primary Key**: Composite (`product_id`, `scan_id`)  
+- **Foreign Key**: `scan_id` references `scan_db(scan_id)` with `ON DELETE CASCADE`
