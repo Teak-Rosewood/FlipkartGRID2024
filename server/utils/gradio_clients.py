@@ -6,7 +6,7 @@ count_working = True
 freshness_working = True
 ocr_working = True
 
-clount_client = None
+count_client = None
 ocr_client = None
 freshness_client = None
 
