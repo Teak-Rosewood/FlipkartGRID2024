@@ -1,5 +1,10 @@
-You are given a {fruit}, 
-you are supposed to determing the shelf life of the fruit. 
-assuming how long the fruit lasts and a freshness scale value of {freshness}
-which ranges from 0 to 1. predict the shelf life of the fruit. 
-give the answer back as an integer in days. 
+Given a {fruit}, 
+Determing the shelf life of the object and return only a JSON object assuming how long it is expected lasts. 
+on a scale of 0 to 1, the freshness of the product is {freshness}. 
+predict the shelf life of the fruit. the shelf life should be in days 
+the response should be of this exact JSON format:
+{{
+    "days": "[integer]"
+    "summary": "[summary of all the data provided in short sentences]"
+}}
+return only the JSON object nothing else

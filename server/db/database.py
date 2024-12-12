@@ -12,18 +12,31 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def get_sql_db():
     session = SessionLocal()
-    try: 
+    try:
         yield session
     finally:
         session.close()
 
 def save_record(record):
-    db = get_sql_db()
-    db.session.add(record)
-    db.session.commit()
+    db = SessionLocal()
+    try:
+        db.add(record)
+        db.commit()
+        db.refresh(record)
+    except Exception as e:
+        db.rollback()
+        raise e
+    finally:
+        db.close()
 
 def save_multiple_records(records):
-    db = get_sql_db()
-    for record in records:
-        db.session.add(record)
-    db.session.commit()
+    db = SessionLocal()
+    try:
+        for record in records:
+            db.add(record)
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise e
+    finally:
+        db.close()

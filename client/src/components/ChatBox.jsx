@@ -14,7 +14,7 @@ const ChatBox = () => {
             className={`p-3 rounded-lg ${
               entry.sender === 'system'
                 ? 'bg-blue-100 text-blue-800 self-start'
-                : 'bg-gray-200 text-gray-800 self-end'
+                : 'bg-green-200 text-gray-800 self-end'
             }`}
             dangerouslySetInnerHTML={{ __html: entry.text }}
           />

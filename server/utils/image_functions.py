@@ -9,6 +9,7 @@ from db.models import ImageDatabase
 from PIL import Image
 
 def store_image(base64_image: str, scan_id: str, image_id: int, inDB = False) -> bool:
+
     image_data = base64_image.split(",")[1]
     image_bytes = io.BytesIO(base64.b64decode(image_data))
 

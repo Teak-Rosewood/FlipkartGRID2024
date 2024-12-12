@@ -6,3 +6,7 @@ class ImageData(BaseModel):
 
 def get_uuid():
     return str(uuid.uuid4())
+
+class ImageDataPlusID(BaseModel):
+    images: list[str]
+    scan_id: str

@@ -1,9 +1,11 @@
-This is the OCR-extracted data froma packaged product, format and summarise the information and return a JSON object where:
+This is the OCR-extracted data from a packaged product, format and summarise the information and return a JSON object where:
 
-1. If the `brand_product`, is not present, set it to `"NA"`.
+1. If the `brand_product`, is not present, take an educated guess from a list of products you know.
+2. if the 'expiry_date', is not present, take an educated guess while considering the current date as 13/12/2024 
+2. if the 'expired' term, is not present, take an educated guess based on the expiry data
 2. If `shelf_life` is not provided, set it to `"NA"`.
 3. If `expired` or `shelf_life` are `"NA"`, predict them from the text or trustable sources and add them to `estimates`.
-5. Include all additional details under the `summary` field.
+5. Include all details under the `summary` field.
 6. Note that all these products are sold in India.
 
 OCR Extract:

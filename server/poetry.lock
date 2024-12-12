@@ -572,6 +572,20 @@ dnspython = ">=2.0.0"
 idna = ">=2.0.0"
 
 [[package]]
+name = "eval-type-backport"
+version = "0.2.0"
+description = "Like `typing._eval_type`, but lets older Python versions use newer typing features."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "eval_type_backport-0.2.0-py3-none-any.whl", hash = "sha256:ac2f73d30d40c5a30a80b8739a789d6bb5e49fdffa66d7912667e2015d9c9933"},
+    {file = "eval_type_backport-0.2.0.tar.gz", hash = "sha256:68796cfbc7371ebf923f03bdf7bef415f3ec098aeced24e054b253a0e78f7b37"},
+]
+
+[package.extras]
+tests = ["pytest"]
+
+[[package]]
 name = "exceptiongroup"
 version = "1.2.2"
 description = "Backport of PEP 654 (exception groups)"
@@ -1378,6 +1392,17 @@ files = [
 jsonpointer = ">=1.9"
 
 [[package]]
+name = "jsonpath-python"
+version = "1.0.6"
+description = "A more powerful JSONPath implementation in modern python"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "jsonpath-python-1.0.6.tar.gz", hash = "sha256:dd5be4a72d8a2995c3f583cf82bf3cd1a9544cfdabf2d22595b67aff07349666"},
+    {file = "jsonpath_python-1.0.6-py3-none-any.whl", hash = "sha256:1e3b78df579f5efc23565293612decee04214609208a2335884b3ee3f786b575"},
+]
+
+[[package]]
 name = "jsonpointer"
 version = "3.0.0"
 description = "Identify specific nodes in a JSON document (RFC 6901)"
@@ -1895,6 +1920,28 @@ files = [
     {file = "mdurl-0.1.2-py3-none-any.whl", hash = "sha256:84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8"},
     {file = "mdurl-0.1.2.tar.gz", hash = "sha256:bb413d29f5eea38f31dd4754dd7377d4465116fb207585f97bf925588687c1ba"},
 ]
+
+[[package]]
+name = "mistralai"
+version = "1.2.5"
+description = "Python Client SDK for the Mistral AI API."
+optional = false
+python-versions = "<4.0,>=3.8"
+files = [
+    {file = "mistralai-1.2.5-py3-none-any.whl", hash = "sha256:5f0ef2680ead0329569111face1bf2ff7c67c454d43aa0e21324a8faf6c3ab22"},
+    {file = "mistralai-1.2.5.tar.gz", hash = "sha256:05d4130f79704e3b19c0b6320944a348547879fce6894feeb72d9e9d0ee65151"},
+]
+
+[package.dependencies]
+eval-type-backport = ">=0.2.0,<0.3.0"
+httpx = ">=0.27.0,<0.28.0"
+jsonpath-python = ">=1.0.6,<2.0.0"
+pydantic = ">=2.9.0,<3.0.0"
+python-dateutil = ">=2.8.2,<3.0.0"
+typing-inspect = ">=0.9.0,<0.10.0"
+
+[package.extras]
+gcp = ["google-auth (==2.27.0)", "requests (>=2.32.3,<3.0.0)"]
 
 [[package]]
 name = "mpmath"
@@ -4323,4 +4370,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "a5f3b6de6b49b79032461e5b82314225c2b77754fd1518a2878fa90cc698e4e9"
+content-hash = "a48b4e6d7f193ad7c6241134dc6270225662614f444c3a43a9086e6d2a776e63"

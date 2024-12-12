@@ -27,28 +27,29 @@ except Exception as e:
 
 def detect_objects(image_path):
     res = count_client.predict(
-        image_path=handle_file(image_path),
+        image=handle_file(image_path),
         api_name = "/predict"
     ) if count_working else None
+    
     predictions = json.loads(res)
     
     count = predictions['count']
-    classes = predictions['classes']
-    bounding_boxes = predictions['bounding_boxes']
-    scores = predictions['scores']
+    classes = predictions['class']
+    bounding_boxes = predictions['box']
+    scores = predictions['score']
 
     return count, classes, bounding_boxes, scores
 
 def perform_ocr(image_path):
     res = ocr_client.predict(
-        image_path=handle_file(image_path),
+        image=handle_file(image_path),
         api_name = "/predict"
     ) if ocr_working else None
     return res
 
 def get_freshness(image_path):
     res = freshness_client.predict(
-        image_path=handle_file(image_path),
+        image=handle_file(image_path),
         api_name = "/predict"
     ) if freshness_working else None
     return res
