@@ -3,7 +3,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { videoRefsAtom, outputDataState, mainImageState } from '../recoil/atoms';
 import axios from 'axios';
 import { useState } from 'react';
-
+import { URL } from '../constants';
 const SubmitButton = () => {
   const videoRefs = useRecoilValue(videoRefsAtom);
   const [outputData, setOutputData] = useRecoilState(outputDataState);
@@ -30,7 +30,7 @@ const SubmitButton = () => {
       const image1 = canvas1.toDataURL('image/jpeg');
       // const image1 = await loadImageAsDataURL('/testing.jpeg'); 
       setImages([image1]);
-      const response = await axios.post('http://localhost:8000/api/v1/pipeline/initial_image_info', { images: [image1] });
+      const response = await axios.post(`${URL}/api/v1/pipeline/initial_image_info`, { images: [image1] });
       console.log(response)
       const { count, scan_id, classes, bounding_boxes, __ } = response.data;
       setScanId(scan_id);
@@ -59,23 +59,6 @@ const SubmitButton = () => {
       ]);
     }
   };
-  const loadImageAsDataURL = (imagePath) => {
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = () => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          resolve(reader.result);
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(xhr.response);
-      };
-      xhr.onerror = reject;
-      xhr.open('GET', imagePath);
-      xhr.responseType = 'blob';
-      xhr.send();
-    });
-  };
   const handleAddImage = () => {
     const video1 = videoRefs.videoFeed1?.current;
 
@@ -95,7 +78,7 @@ const SubmitButton = () => {
 
   const handleMultipleImages = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/api/v1/pipeline/single_image_info', { images: images, scan_id: scan_id });
+      const response = await axios.post(`${URL}/api/v1/pipeline/single_image_info`, { images: images, scan_id: scan_id });
       console.log(JSON.stringify(response.data, null, 2));
       pingImageInfo(scan_id);
     } catch (error) {
@@ -120,7 +103,7 @@ const SubmitButton = () => {
 
   const pingImageInfo = async (scan_id) => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/v1/pipeline/image_info/${scan_id}`);
+      const response = await axios.get(`${URL}/api/v1/pipeline/image_info/${scan_id}`);
       if (response.data.message) {
         setTimeout(() => pingImageInfo(scan_id), 1000);
       } else {
