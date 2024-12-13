@@ -37,6 +37,7 @@ def detect_objects(image_path):
     classes = predictions['class']
     bounding_boxes = predictions['box']
     scores = predictions['score']
+    print(count, classes, bounding_boxes, scores)
 
     return count, classes, bounding_boxes, scores
 

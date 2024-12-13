@@ -19,7 +19,7 @@ const VideoFeed = ({ label, videoRefKey }) => {
   }, [videoRef, setVideoRefs, videoRefKey]);
 
   useEffect(() => {
-    // Fetch media devices and set default camera
+    // navigator.mediaDevices.getUserMedia({video: true});
     const fetchMediaDevices = async () => {
       try {
         const devices = await navigator.mediaDevices.enumerateDevices();
@@ -28,6 +28,7 @@ const VideoFeed = ({ label, videoRefKey }) => {
         if (videoDevices.length > 0) {
           setSelectedCamera(videoDevices[0].deviceId);
         }
+        console.log('Video devices:', videoDevices);
       } catch (error) {
         console.error('Error fetching media devices:', error);
       }
@@ -49,9 +50,9 @@ const VideoFeed = ({ label, videoRefKey }) => {
       }
     };
 
-    if (selectedCamera) {
+    // if (selectedCamera) {
       getUserMedia();
-    }
+    // }
   }, [selectedCamera]);
 
   return (
