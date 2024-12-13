@@ -119,3 +119,13 @@ Website hosted on Amazon EC2
 **Table Constraints:**  
 - **Primary Key**: Composite (`product_id`, `scan_id`)  
 - **Foreign Key**: `scan_id` references `scan_db(scan_id)` with `ON DELETE CASCADE`
+
+## Example
+
+Here is a sample output:
+![image](https://github.com/user-attachments/assets/adc7093d-f9e7-49c1-9057-23c8310944e6)
+
+
+## Note
+
+Servers may not always be running, we try to keep them on as much as possible.
