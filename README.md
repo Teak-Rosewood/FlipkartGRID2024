@@ -1,5 +1,9 @@
 # Flipkart GRID 6.0 Robotics drive - Brief Submission & Presentation Round
 
+## Running Web Server - 
+
+[link](https://grid2024.saatwik.in/)
+
 ## Client
 
 To build client run
