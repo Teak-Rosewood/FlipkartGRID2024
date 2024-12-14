@@ -68,12 +68,6 @@ def root(image_ocr_process: BackgroundTasks, data: ImageDataPlusID, db: Session 
     image_ocr_process.add_task(single_image_ocr, data.scan_id, db)
     return {"message": "Image Processing"}
 
-# @router.post("/multiple_image_info")
-# def root(image_ocr_process: BackgroundTasks, data: ImageDataPlusID):
-#     for i, image in enumerate(data.images):
-#         store_image(image, data.scan_id, i+2, inDB=True)
-#     return {"message": "Image Processing"}
-
 @router.get("/image_info/{scan_id}")
 def get_image_info(scan_id: str, db: Session = Depends(get_sql_db)):
     product_scan_record = db.query(ScanDatabase).filter(ScanDatabase.scan_id == scan_id).first()
@@ -91,3 +85,16 @@ def get_image_info(scan_id: str, db: Session = Depends(get_sql_db)):
     else:
         print("not processed")
         return {"message": "Scan is not yet processed"}
+
+@router.get("/all_data")
+def root(db: Session = Depends(get_sql_db)):
+    product_data = db.query(ProductDatabase).all()
+    fresh_data = db.query(FreshDatabase).all()
+    scan_data = db.query(ScanDatabase).all()
+    image_data = db.query(ImageDatabase).all()
+    return {
+        "product_data": [record.__dict__ for record in product_data],
+        "fresh_data": [record.__dict__ for record in fresh_data],
+        "image_data": [record.__dict__ for record in image_data],
+        "scan_data": [record.__dict__ for record in scan_data]
+    }

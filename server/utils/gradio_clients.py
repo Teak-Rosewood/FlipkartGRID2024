@@ -37,14 +37,18 @@ def detect_objects(image_path):
     classes = predictions['class']
     bounding_boxes = predictions['box']
     scores = predictions['score']
+    print(count, classes, bounding_boxes, scores)
 
     return count, classes, bounding_boxes, scores
 
 def perform_ocr(image_path):
+    import time
+    start_time = time.time()
     res = ocr_client.predict(
         image=handle_file(image_path),
         api_name = "/predict"
     ) if ocr_working else None
+    print("Time taken for OCR: ", time.time() - start_time)
     return res
 
 def get_freshness(image_path):

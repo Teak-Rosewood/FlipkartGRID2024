@@ -35,6 +35,7 @@ class ProductDatabase(Base):
     product_id  = Column(Integer, primary_key=True)
     scan_id = Column(String, ForeignKey(ScanDatabase.scan_id, ondelete='CASCADE'), primary_key=True)
     brand = Column(String)
+    price = Column(String)
     expiry_date = Column(String)
     expired = Column(String)
     shelf_life = Column(Integer, index=True)

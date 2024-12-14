@@ -95,8 +95,8 @@ demo = gr.Interface(
     fn=detect_objects,
     inputs=image_input,
     outputs='text',
-    title="Frshness prediction",
+    title="Object Detection",
     description="Upload an image, and the model will detect objects and return the number of objects along with the image showing the bounding boxes."
 )
 
-demo.launch(share=True)
+print(demo.launch(share=True), flush=True)
