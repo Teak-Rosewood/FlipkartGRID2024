@@ -99,4 +99,4 @@ demo = gr.Interface(
     description="Upload an image, and the model will detect objects and return the number of objects along with the image showing the bounding boxes."
 )
 
-demo.launch(share=True)
+print(demo.launch(share=True), flush=True)

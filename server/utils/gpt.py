@@ -73,24 +73,22 @@ def get_pixtral_response(image_path, text = ""):
                     This is the image from a packaged product, estimate the information and return a JSON object where:
 
                     1. If the `brand_product`, is not present, take an educated guess from a list of products you know.
+                    1. If the `price`, is not present, take an educated guess from a list of products you know.
                     2. if the 'expiry_date', is not present, take an educated guess while considering the today's date as 13/12/2024 
-                    2. if the 'expired' term, is not present, take an educated guess based on the expiry data
-                    2. If `shelf_life` is not provided, set it to `"NA"`.
-                    3. If `expired` or `shelf_life` are `"NA"`, predict them from the text or trustable sources and add them to `estimates`.
-                    5. Include all details under the `summary` field.
-                    6. Note that all these products are sold in India.
+                    3. if the 'expired' term, is not present, take an educated guess based on the expiry data
+                    4. If `shelf_life` is not provided, set it to `"NA"`.
+                    5. If `expired` or `shelf_life` are `"NA"`, predict them from the text or trustable sources and add them to `estimates`.
+                    6. Include all details under the `summary` field.
+                    7. Note that all these products are sold in India.
 78
                     Expected JSON format:
                     {{
-                    "brand_product": "[Extracted or 'NA']",
-                    "expiry_date": "[Extracted or 'NA']",
+                    "brand_product": "[guess of brand and product]",
+                    "price": "[guess the price if not extracted]",
+                    "expiry_date": "[guess if the expiry date is not extracted]",
                     "expired": "[Extracted as true or false or 'NA']",
-                    "shelf_life": "[Extracted or 'NA']",
-                    "estimates" : {{
-                        expected_shelf_life: "[if shelf_life is NA provide an estimated price in days]"
-                        expected_expired: "[if expired is true]"
-                    }}
-                    "summary" : "[summary of all the details extracted from the image along with estimated values]"
+                    "shelf_life": "[guess if shelf life is not extracted]",
+                    "summary" : "[summary of all the details relating to the product only extracted from the image along with estimated values for price, expired, shelf_life]"
                     }}
 
                     Return only the JSON object, all in small letters without any additional text or explanation.
@@ -98,7 +96,7 @@ def get_pixtral_response(image_path, text = ""):
                 },
                 {
                     "type": "text",
-                    "text": "JSON DATA provided with the image is" + text
+                    "text": "text data provided with the ocr: [" + text + "]"
                 },
                 {
                     "type": "image_url",
