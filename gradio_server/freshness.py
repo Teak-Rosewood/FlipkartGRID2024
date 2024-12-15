@@ -32,6 +32,7 @@ def preprocess_image(image: Image.Image):
 
 def run_inference(image: Image.Image):
     """Run inference on a single image."""
+    image = image.convert("HSV")
     # Preprocess the image
     input_tensor = preprocess_image(image)
     
