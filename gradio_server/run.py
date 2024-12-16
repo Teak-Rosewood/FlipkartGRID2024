@@ -16,7 +16,7 @@ signal.signal(signal.SIGINT, signal_handler)
 
 # Start the subprocesses
 print('Starting subprocesses...')
-proc2 = subprocess.Popen(['python', 'freshness.py'])
+proc2 = subprocess.Popen(['python', 'freshness_mobile.py'])
 print('Freshness IP:')
 time.sleep(5)
 proc3 = subprocess.Popen(['python', 'ocr.py'])

@@ -51,7 +51,7 @@ def freshness_run(image):
 
 def run_classify_and_freshness(image):
     output = {}
-    output['class'] = get_answer_from_image(image)
+    output['type'] = get_answer_from_image(image)
     output['freshness'] = freshness_run(image)
 
     json_output = json.dumps(output)
