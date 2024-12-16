@@ -20,7 +20,7 @@ transform = transforms.Compose([
 # Define the model architecture
 mob_model = models.mobilenet_v2(pretrained=False)
 mob_model.classifier[1] = nn.Linear(mob_model.last_channel, 2)
-mob_model.load_state_dict(torch.load("mobilenet_freshness_model.pth"))
+mob_model.load_state_dict(torch.load("models/mobilenet_freshness_model.pth"))
 mob_model.to('cuda')
 mob_model.eval()
 
